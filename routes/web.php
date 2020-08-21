@@ -32,6 +32,8 @@ Route::group([
     Route::group(['middleware' => 'admin'], function () {
       Route::get('dashboard', 'AdminController@dashboard')->name('dashboard');
       Route::get('logout', 'AdminController@logout')->name('logout');
+      Route::match(['get', 'post'],'settings', 'AdminController@settings')->name('settings');
+      Route::post('check-current-password', 'AdminController@check_current_password');
     });
   }
 );

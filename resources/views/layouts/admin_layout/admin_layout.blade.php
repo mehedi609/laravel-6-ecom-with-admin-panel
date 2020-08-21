@@ -91,6 +91,9 @@
     <script src="{{asset('assets/backend/dist/js/demo.js')}}"></script>
 
     <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+
+    @stack('admin_js')
+
     {!! Toastr::message() !!}
   </body>
 </html>

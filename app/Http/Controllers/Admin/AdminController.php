@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Admin;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class AdminController extends Controller
 {
@@ -45,6 +48,47 @@ class AdminController extends Controller
         Auth::guard('admin')->logout();
         Toastr::info('Thank you for staying with us', 'Logged Out!!');
         return redirect(route('admin.login'));
+    }
+
+    public function settings(Request $request)
+    {
+        if ($request->isMethod('post')) {
+            $request->validate([
+                'name' => 'required|min:4|max:50',
+                'current_password' => 'required|min:6',
+                'new_password' => 'required|confirmed|min:6',
+            ]);
+
+            $current_password = Auth::guard('admin')->user()->password;
+            $new_password = $request->new_password;
+
+            if (!Hash::check($request->current_password, $current_password)) {
+                Session::flash('error_msg', 'Your current password is not current');
+            } elseif (Hash::check($new_password, $current_password)) {
+                Session::flash('error_msg', 'Your entered an old password');
+            } else {
+                Admin::where('id', Auth::guard('admin')->user()->id)
+                    ->update(['password' => bcrypt($new_password), 'name' => $request->name]);
+                Toastr::success('Password Updated Successfully', 'Password Updated');
+            }
+
+            return redirect()->back();
+        }
+
+        $admin_info = Admin::where('email', Auth::guard('admin')->user()->email)->first();
+
+        return view('admin.settings', compact('admin_info'));
+    }
+
+    public function check_current_password(Request $request)
+    {
+        $current_password = $request->current_password;
+
+        if (Hash::check($current_password, Auth::guard('admin')->user()->password)) {
+            return json_encode(true);
+        } else {
+            return json_encode(false);
+        }
     }
 
     /**

@@ -1,12 +1,12 @@
 <?php return array (
   'root' => 
   array (
-    'pretty_version' => 'No version set (parsed as 1.0.0)',
-    'version' => '1.0.0.0',
+    'pretty_version' => 'dev-master',
+    'version' => 'dev-master',
     'aliases' => 
     array (
     ),
-    'reference' => NULL,
+    'reference' => 'a82dd0ec1a38bb0786568614bd078a7cbc73f9f4',
     'name' => 'laravel/laravel',
   ),
   'versions' => 
@@ -500,12 +500,12 @@
     ),
     'laravel/laravel' => 
     array (
-      'pretty_version' => 'No version set (parsed as 1.0.0)',
-      'version' => '1.0.0.0',
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
       'aliases' => 
       array (
       ),
-      'reference' => NULL,
+      'reference' => 'a82dd0ec1a38bb0786568614bd078a7cbc73f9f4',
     ),
     'laravel/tinker' => 
     array (
@@ -569,6 +569,15 @@
       array (
       ),
       'reference' => 'f9eee5cec93dfb313a38b6b288741e84e53f02d5',
+    ),
+    'mpociot/laravel-test-factory-helper' => 
+    array (
+      'pretty_version' => 'v2.1.0',
+      'version' => '2.1.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '4660d6116cf451394343dea7922dc0e9de7e78c0',
     ),
     'myclabs/deep-copy' => 
     array (
