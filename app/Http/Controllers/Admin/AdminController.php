@@ -68,7 +68,7 @@ class AdminController extends Controller
                 Session::flash('error_msg', 'Your entered an old password');
             } else {
                 Admin::where('id', Auth::guard('admin')->user()->id)
-                    ->update(['password' => bcrypt($new_password), 'name' => $request->name]);
+                    ->update(['password' => bcrypt($new_password)]);
                 Toastr::success('Password Updated Successfully', 'Password Updated');
             }
 
@@ -89,6 +89,31 @@ class AdminController extends Controller
         } else {
             return json_encode(false);
         }
+    }
+
+    public function update_admin_details(Request $request)
+    {
+        $admin_info = Admin::where('email', Auth::guard('admin')->user()->email)->first();
+
+        if ($request->isMethod('post')) {
+            $rules = [
+                'name' => 'required|regex:/^[\pL\s\-]+$/u',
+                'mobile' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/',
+//                'image' => 'required|mimes:jpeg,jpg,png|size:5000'
+            ];
+
+            $request->validate($rules);
+
+            $admin_info->name = $request->name;
+            $admin_info->mobile = $request->mobile;
+
+            $admin_info->save();
+
+            Toastr::success('Admin details updated Successfully', 'Admin Details Updated!');
+            return redirect()->back();
+        }
+
+        return view('admin.update_admin_details', compact('admin_info'));
     }
 
     /**

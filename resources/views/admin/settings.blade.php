@@ -29,7 +29,7 @@
             <!-- general form elements -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Update Admin Settings</h3>
+                <h3 class="card-title">Update Admin Password</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
@@ -50,6 +50,7 @@
                       name="name"
                       id="name"
                       value="{{$admin_info->name}}"
+                      readonly
                     >
                   </div>
 

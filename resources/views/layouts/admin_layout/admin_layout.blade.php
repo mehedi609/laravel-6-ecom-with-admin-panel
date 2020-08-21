@@ -83,6 +83,8 @@
     <script src="{{asset('assets/backend/plugins/summernote/summernote-bs4.min.js')}}"></script>
     <!-- overlayScrollbars -->
     <script src="{{asset('assets/backend/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
+    <!-- bs-custom-file-input -->
+    <script src="{{asset('assets/backend/plugins/bs-custom-file-input/bs-custom-file-input.min.js')}}"></script>
     <!-- AdminLTE App -->
     <script src="{{asset('assets/backend/dist/js/adminlte.js')}}"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->

@@ -20,20 +20,21 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group([
-  'prefix' => 'admin',
-  'as' => 'admin.',
-  'namespace' => 'Admin',
+    'prefix' => 'admin',
+    'as' => 'admin.',
+    'namespace' => 'Admin',
 ],
-  function () {
+    function () {
 //    Route::get('/', 'AdminController@login')->name('showLoginForm');
-    Route::get('/', 'AdminController@login')->name('login');
-    Route::post('/', 'AdminController@login')->name('login');
+        Route::get('/', 'AdminController@login')->name('login');
+        Route::post('/', 'AdminController@login')->name('login');
 
-    Route::group(['middleware' => 'admin'], function () {
-      Route::get('dashboard', 'AdminController@dashboard')->name('dashboard');
-      Route::get('logout', 'AdminController@logout')->name('logout');
-      Route::match(['get', 'post'],'settings', 'AdminController@settings')->name('settings');
-      Route::post('check-current-password', 'AdminController@check_current_password');
-    });
-  }
+        Route::group(['middleware' => 'admin'], function () {
+            Route::get('dashboard', 'AdminController@dashboard')->name('dashboard');
+            Route::get('logout', 'AdminController@logout')->name('logout');
+            Route::match(['get', 'post'], 'settings', 'AdminController@settings')->name('settings');
+            Route::match(['get', 'post'], 'update-details', 'AdminController@update_admin_details')->name('update.details');
+            Route::post('check-current-password', 'AdminController@check_current_password');
+        });
+    }
 );
