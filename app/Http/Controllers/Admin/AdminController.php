@@ -6,12 +6,17 @@ use App\Admin;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class AdminController extends Controller
 {
+    private $root_path = "images/admin/admin_photos";
+
     public function dashboard()
     {
         return view('admin.dashboard');
@@ -99,13 +104,35 @@ class AdminController extends Controller
             $rules = [
                 'name' => 'required|regex:/^[\pL\s\-]+$/u',
                 'mobile' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/',
-//                'image' => 'required|mimes:jpeg,jpg,png|size:5000'
+                'image' => 'required|mimes:jpeg,jpg,png|max:5000'
             ];
 
             $request->validate($rules);
 
             $admin_info->name = $request->name;
             $admin_info->mobile = $request->mobile;
+
+            if ($request->hasFile('image')) {
+                $img_temp = $request->file('image');
+                if ($img_temp->isValid()) {
+
+                    //delete existing old image
+                    if (!empty($admin_info->image)) {
+                        $old_image_path = "{$this->root_path}/{$admin_info->image}";
+                        if (file_exists($old_image_path))
+                            unlink($old_image_path);
+                    }
+
+                    $unique_img_name = $this->create_unique_image_name($request->name, $img_temp);
+
+                    $img_path_to_save = "{$this->root_path}/{$unique_img_name}";
+                    Image::make($img_temp)->resize(300, 400)->save($img_path_to_save);
+
+                    $admin_info->image = $unique_img_name;
+
+
+                }
+            }
 
             $admin_info->save();
 
@@ -114,6 +141,16 @@ class AdminController extends Controller
         }
 
         return view('admin.update_admin_details', compact('admin_info'));
+    }
+
+    private function create_unique_image_name($name, $image)
+    {
+        $slug = Str::slug($name);
+        $date_time =  Carbon::now()->toDateString();
+        $extension = $image->getClientOriginalExtension();
+        $uuid = explode('-', Str::uuid());
+        $uuid = array_pop($uuid);
+        return "{$slug}-{$date_time}-{$uuid}.{$extension}";
     }
 
     /**
